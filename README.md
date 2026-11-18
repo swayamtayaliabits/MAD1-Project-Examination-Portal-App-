@@ -1,1 +1,2 @@
 # MAD1-Project-Examination-Portal-App-
+Educational institutions need efficient systems to manage examinations involving administrators, examiners and students. Many institutions are still relying on spreadsheets,emails or manual coordination, which makes it difficult to manage examination schedules, examiner availability, slot booking, student participation and evaluation records. This project develops an Examination Management Portal (EMP), a web application that lets the Admin, Examiners and Students interact with the system according to their roles.
