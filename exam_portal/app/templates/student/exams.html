@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Available examinations</h3>
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-4"><input name="q" value="{{ q }}" class="form-control" placeholder="Name, course name or code"></div>
+    <div class="col-md-3">
+        <select name="exam_type" class="form-select">
+            <option value="">Any type</option>
+            {% for t in exam_types %}<option {% if exam_type == t %}selected{% endif %}>{{ t }}</option>{% endfor %}
+        </select></div>
+    <div class="col-md-3">
+        <select name="course_id" class="form-select">
+            <option value="">Any course</option>
+            {% for c in courses %}<option value="{{ c.id }}" {% if course_id == c.id %}selected{% endif %}>{{ c.code }}</option>{% endfor %}
+        </select></div>
+    <div class="col-auto"><button class="btn btn-primary">Filter</button></div>
+</form>
+<div class="row g-3">
+    {% for e in exams %}
+    <div class="col-md-4"><div class="card p-3 h-100">
+        <h5>{{ e.name }}</h5>
+        <p class="mb-1">{{ e.course.code }} - {{ e.course.name }}</p>
+        <p class="mb-1 text-muted">{{ e.exam_type }} | {{ e.duration_minutes }} min | {{ e.max_marks }} marks</p>
+        <p class="text-muted">Book by {{ e.booking_end }}</p>
+        <a class="btn btn-sm btn-primary mt-auto" href="{{ url_for('student.exam_detail', exam_id=e.id) }}">View slots</a>
+    </div></div>
+    {% else %}
+    <p class="text-muted">No examinations match.</p>
+    {% endfor %}
+</div>
+{% endblock %}

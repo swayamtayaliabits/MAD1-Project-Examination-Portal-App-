@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Change examiner</h3>
+<p>{{ slot.exam.name }} on {{ slot.slot_date }}, {{ slot.start_time.strftime('%H:%M') }} - {{ slot.end_time.strftime('%H:%M') }}.
+   Current examiner: <b>{{ slot.examiner.name }}</b>. Booked students stay with the slot.</p>
+{% if choices %}
+<form method="post" class="col-md-5">
+    <div class="mb-3"><label class="form-label">New examiner (must be assigned to this examination)</label>
+        <select name="examiner_id" class="form-select">
+            {% for e in choices %}<option value="{{ e.id }}">{{ e.name }}</option>{% endfor %}
+        </select></div>
+    <button class="btn btn-primary">Change</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('admin.slots') }}">Cancel</a>
+</form>
+{% else %}
+<div class="alert alert-warning">No other approved examiner is assigned to this examination. Assign one on the examination page first.</div>
+<a href="{{ url_for('admin.slots') }}">Back</a>
+{% endif %}
+{% endblock %}

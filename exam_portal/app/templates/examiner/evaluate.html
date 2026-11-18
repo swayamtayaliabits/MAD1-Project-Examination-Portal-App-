@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Evaluate {{ booking.student.name }}</h3>
+<p class="text-muted">{{ booking.exam.name }} | out of {{ booking.exam.max_marks }}</p>
+<form method="post" class="col-md-7">
+    {% for r in rubrics %}
+    <div class="mb-3">
+        <label class="form-label">{{ r.criterion_name }} (0 to {{ r.max_marks }})</label>
+        <input type="number" min="0" max="{{ r.max_marks }}" name="score_{{ r.id }}" class="form-control"
+               value="{{ given.get(r.id, '') }}" required>
+        <div class="form-text">{{ r.description }}</div>
+    </div>
+    {% endfor %}
+    <div class="mb-3"><label class="form-label">Remarks</label>
+        <textarea name="remarks" class="form-control" rows="3">{{ remarks or '' }}</textarea></div>
+    <button class="btn btn-primary">Submit marks</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('examiner.slot_students', slot_id=booking.slot_id) }}">Cancel</a>
+</form>
+{% endblock %}

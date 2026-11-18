@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Students in this slot</h3>
+<p class="text-muted">{{ slot.exam.name }} | {{ slot.slot_date }} | {{ slot.start_time.strftime('%H:%M') }} - {{ slot.end_time.strftime('%H:%M') }}</p>
+<table class="table bg-white align-middle">
+    <thead><tr><th>Student</th><th>Email</th><th>Status</th><th>Marks</th><th></th></tr></thead>
+    <tbody>
+    {% for b in slot.bookings if b.status != 'Cancelled' %}
+        <tr><td>{{ b.student.name }}</td><td>{{ b.student.email }}</td><td>{{ b.status }}</td>
+            <td>{{ b.evaluation.total_marks if b.evaluation else '-' }} / {{ slot.exam.max_marks }}</td>
+            <td class="text-end">
+                {% if not slot.exam.results_published %}
+                <a class="btn btn-sm btn-primary" href="{{ url_for('examiner.evaluate', booking_id=b.id) }}">
+                    {{ 'Edit marks' if b.evaluation else 'Evaluate' }}</a>
+                {% endif %}
+            </td></tr>
+    {% else %}
+        <tr><td colspan="5" class="text-muted">Nobody has booked this slot yet.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('examiner.exam_detail', exam_id=slot.exam_id) }}">Back</a>
+{% endblock %}

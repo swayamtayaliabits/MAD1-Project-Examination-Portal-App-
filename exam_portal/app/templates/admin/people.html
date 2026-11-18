@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+    <h3>{{ kind }}</h3>
+    {% if is_examiner %}<a class="btn btn-primary" href="{{ url_for('admin.examiner_new') }}">Add examiner</a>{% endif %}
+</div>
+<table class="table bg-white align-middle">
+    <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th>{% if is_examiner %}<th>Department</th>{% endif %}<th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for p in people %}
+        <tr>
+            <td>{{ p.id }}</td><td>{{ p.name }}</td><td>{{ p.email }}</td><td>{{ p.phone or '-' }}</td>
+            {% if is_examiner %}<td>{{ p.department or '-' }}</td>{% endif %}
+            <td>{{ p.status }}</td>
+            <td class="text-end">
+                <form method="post" action="{{ url_for('admin.user_status', user_id=p.id) }}" class="d-inline">
+                    {% if p.status == 'pending' %}
+                        <button name="action" value="approve" class="btn btn-sm btn-success">Approve</button>
+                    {% elif p.status == 'deactivated' %}
+                        <button name="action" value="activate" class="btn btn-sm btn-outline-success">Reactivate</button>
+                    {% else %}
+                        <button name="action" value="deactivate" class="btn btn-sm btn-outline-danger">Deactivate</button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+    {% else %}
+        <tr><td colspan="7" class="text-center text-muted">Nobody here yet.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

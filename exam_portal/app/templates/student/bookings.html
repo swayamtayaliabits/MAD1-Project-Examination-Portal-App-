@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>My bookings and examination history</h3>
+<table class="table bg-white align-middle">
+    <thead><tr><th>Examination</th><th>Date</th><th>Time</th><th>Examiner</th><th>Booked on</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for b in bookings %}
+        <tr><td>{{ b.exam.name }}</td><td>{{ b.slot.slot_date }}</td>
+            <td>{{ b.slot.start_time.strftime('%H:%M') }} - {{ b.slot.end_time.strftime('%H:%M') }}</td>
+            <td>{{ b.slot.examiner.name }}</td><td>{{ b.booking_date.strftime('%Y-%m-%d') }}</td><td>{{ b.status }}</td>
+            <td class="text-end">
+                {% if b.status == 'Booked' and not b.exam.booking_deadline_passed %}
+                <form method="post" action="{{ url_for('student.cancel_booking', booking_id=b.id) }}" class="d-inline">
+                    <button class="btn btn-sm btn-outline-danger">Cancel</button></form>
+                {% endif %}
+                {% if b.evaluation and b.exam.results_published %}
+                <a class="btn btn-sm btn-success" href="{{ url_for('student.result', booking_id=b.id) }}">View result</a>
+                {% endif %}
+            </td></tr>
+    {% else %}
+        <tr><td colspan="7" class="text-center text-muted">You have no bookings yet.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Search</h3>
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-5"><input name="q" value="{{ q }}" class="form-control" placeholder="Name or ID"></div>
+    <div class="col-auto"><button class="btn btn-primary">Search</button></div>
+</form>
+{% if q %}
+<h5>Students ({{ found.students|length }})</h5>
+<ul>{% for s in found.students %}<li>#{{ s.id }} {{ s.name }} - {{ s.email }} ({{ s.status }})</li>{% else %}<li class="text-muted">none</li>{% endfor %}</ul>
+<h5>Examiners ({{ found.examiners|length }})</h5>
+<ul>{% for s in found.examiners %}<li>#{{ s.id }} {{ s.name }} - {{ s.email }} ({{ s.status }})</li>{% else %}<li class="text-muted">none</li>{% endfor %}</ul>
+<h5>Examinations ({{ found.exams|length }})</h5>
+<ul>{% for e in found.exams %}<li>#{{ e.id }} <a href="{{ url_for('admin.exam_detail', exam_id=e.id) }}">{{ e.name }}</a> ({{ e.status }})</li>{% else %}<li class="text-muted">none</li>{% endfor %}</ul>
+<h5>Bookings ({{ found.bookings|length }})</h5>
+<ul>{% for b in found.bookings %}<li>#{{ b.id }} {{ b.student.name }} - {{ b.exam.name }} ({{ b.status }})</li>{% else %}<li class="text-muted">none</li>{% endfor %}</ul>
+{% endif %}
+{% endblock %}

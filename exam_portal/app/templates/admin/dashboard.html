@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-3">Admin dashboard</h3>
+<div class="row g-3">
+    {% for label, value in [('Courses', stats.courses), ('Examinations', stats.exams), ('Examiners', stats.examiners),
+                            ('Students', stats.students), ('Slots', stats.slots), ('Bookings', stats.bookings)] %}
+    <div class="col-6 col-md-2">
+        <div class="card p-3"><div class="text-muted small">{{ label }}</div><div class="stat-number">{{ value }}</div></div>
+    </div>
+    {% endfor %}
+</div>
+{% if stats.pending_examiners > 0 %}
+<div class="alert alert-warning mt-4">
+    {{ stats.pending_examiners }} examiner(s) waiting for approval.
+    <a href="{{ url_for('admin.examiners') }}">Review them</a>
+</div>
+{% endif %}
+{% endblock %}

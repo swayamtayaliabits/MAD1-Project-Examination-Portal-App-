@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-3">Welcome, {{ current_user.name }}</h3>
+<form method="get" action="{{ url_for('student.exams') }}" class="row g-2 mb-4">
+    <div class="col-md-5"><input name="q" class="form-control" placeholder="Search examinations"></div>
+    <div class="col-auto"><button class="btn btn-primary">Search</button></div>
+</form>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card p-3 mb-3">
+            <h5>Available examinations ({{ exams|length }})</h5>
+            <ul class="mb-0">
+                {% for e in exams %}<li><a href="{{ url_for('student.exam_detail', exam_id=e.id) }}">{{ e.name }}</a> - {{ e.course.code }}, book by {{ e.booking_end }}</li>
+                {% else %}<li class="text-muted">None open for booking right now.</li>{% endfor %}
+            </ul>
+        </div>
+        <div class="card p-3">
+            <h5>Available slots ({{ available_slots|length }})</h5>
+            <ul class="mb-0">
+                {% for s in available_slots %}<li>{{ s.exam.name }}: {{ s.slot_date }} {{ s.start_time.strftime('%H:%M') }} ({{ s.available_seats }} seats left)</li>
+                {% else %}<li class="text-muted">No free slots.</li>{% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card p-3 mb-3">
+            <h5>Upcoming examinations ({{ upcoming|length }})</h5>
+            <ul class="mb-0">
+                {% for b in upcoming %}<li>{{ b.exam.name }}: {{ b.slot.slot_date }} at {{ b.slot.start_time.strftime('%H:%M') }}</li>
+                {% else %}<li class="text-muted">Nothing coming up.</li>{% endfor %}
+            </ul>
+        </div>
+        <div class="card p-3 mb-3">
+            <h5>Booked slots ({{ booked|length }})</h5>
+            <a href="{{ url_for('student.bookings') }}">See all bookings and history</a>
+        </div>
+        <div class="card p-3">
+            <h5>Published results ({{ results|length }})</h5>
+            <ul class="mb-0">
+                {% for b in results %}<li><a href="{{ url_for('student.result', booking_id=b.id) }}">{{ b.exam.name }}</a>: {{ b.evaluation.total_marks }} / {{ b.exam.max_marks }}</li>
+                {% else %}<li class="text-muted">No results published yet.</li>{% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>All examination slots</h3>
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <select name="exam_id" class="form-select">
+            <option value="">All examinations</option>
+            {% for e in exams %}<option value="{{ e.id }}" {% if selected == e.id %}selected{% endif %}>{{ e.name }}</option>{% endfor %}
+        </select>
+    </div>
+    <div class="col-auto"><button class="btn btn-primary">Filter</button></div>
+</form>
+<table class="table bg-white align-middle">
+    <thead><tr><th>ID</th><th>Examination</th><th>Date</th><th>Time</th><th>Examiner</th><th>Seats</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for s in slots %}
+        <tr>
+            <td>{{ s.id }}</td><td>{{ s.exam.name }}</td><td>{{ s.slot_date }}</td>
+            <td>{{ s.start_time.strftime('%H:%M') }} - {{ s.end_time.strftime('%H:%M') }}</td>
+            <td>{{ s.examiner.name }}</td><td>{{ s.available_seats }} / {{ s.capacity }}</td><td>{{ s.status }}</td>
+            <td class="text-end">
+                {% if s.status != 'Cancelled' %}
+                <a class="btn btn-sm btn-secondary" href="{{ url_for('admin.slot_examiner', slot_id=s.id) }}">Change examiner</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% else %}
+        <tr><td colspan="8" class="text-center text-muted">No slots found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

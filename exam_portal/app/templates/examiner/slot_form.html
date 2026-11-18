@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+{% set f = form if form else slot %}
+<h3>{{ 'Edit' if slot else 'Create' }} slot for {{ exam.name }}</h3>
+<form method="post" class="row g-3 col-md-8">
+    <div class="col-md-6"><label class="form-label">Date</label>
+        <input type="date" name="slot_date" class="form-control" value="{{ f.slot_date if f else '' }}" required></div>
+    <div class="col-md-6"><label class="form-label">Maximum students</label>
+        <input type="number" min="1" name="capacity" class="form-control" value="{{ f.capacity if f else 1 }}" required></div>
+    <div class="col-md-6"><label class="form-label">Start time</label>
+        <input type="time" name="start_time" class="form-control"
+               value="{{ (f.start_time|string)[:5] if f else '' }}" required></div>
+    <div class="col-md-6"><label class="form-label">End time</label>
+        <input type="time" name="end_time" class="form-control"
+               value="{{ (f.end_time|string)[:5] if f else '' }}" required></div>
+    <div class="col-12">
+        <button class="btn btn-primary">Save</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('examiner.exam_detail', exam_id=exam.id) }}">Cancel</a>
+    </div>
+</form>
+{% endblock %}

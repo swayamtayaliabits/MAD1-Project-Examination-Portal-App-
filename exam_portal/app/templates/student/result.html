@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Result: {{ booking.exam.name }}</h3>
+<p class="text-muted">Evaluated by {{ booking.evaluation.examiner.name }} on {{ booking.evaluation.evaluated_at.strftime('%Y-%m-%d') }}</p>
+<table class="table bg-white col-md-6">
+    <thead><tr><th>Criterion</th><th>Marks</th></tr></thead>
+    <tbody>
+    {% for s in booking.evaluation.scores %}
+        <tr><td>{{ s.rubric.criterion_name }}</td><td>{{ s.marks }} / {{ s.rubric.max_marks }}</td></tr>
+    {% endfor %}
+        <tr class="table-light"><th>Total</th><th>{{ booking.evaluation.total_marks }} / {{ booking.exam.max_marks }}</th></tr>
+    </tbody>
+</table>
+<h5>Examiner remarks</h5>
+<p>{{ booking.evaluation.remarks or 'No remarks given.' }}</p>
+<a href="{{ url_for('student.bookings') }}">Back to bookings</a>
+{% endblock %}

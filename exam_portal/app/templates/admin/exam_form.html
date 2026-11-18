@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+{% set f = form if form else exam %}
+<h3>{{ 'Edit' if exam else 'Add' }} examination</h3>
+<form method="post" class="row g-3">
+    <div class="col-md-8"><label class="form-label">Examination name</label>
+        <input name="name" class="form-control" value="{{ f.name if f else '' }}" required></div>
+    <div class="col-md-4"><label class="form-label">Type</label>
+        <select name="exam_type" class="form-select">
+            {% for t in exam_types %}
+            <option value="{{ t }}" {% if f and f.exam_type == t %}selected{% endif %}>{{ t }}</option>
+            {% endfor %}
+        </select></div>
+    <div class="col-md-6"><label class="form-label">Course</label>
+        <select name="course_id" class="form-select">
+            {% for c in courses %}
+            <option value="{{ c.id }}" {% if f and f.course_id|string == c.id|string %}selected{% endif %}>{{ c.code }} - {{ c.name }}</option>
+            {% endfor %}
+        </select></div>
+    <div class="col-md-3"><label class="form-label">Duration (minutes)</label>
+        <input type="number" min="1" name="duration_minutes" class="form-control" value="{{ f.duration_minutes if f else 30 }}"></div>
+    <div class="col-md-3"><label class="form-label">Maximum marks</label>
+        <input type="number" min="1" name="max_marks" class="form-control" value="{{ f.max_marks if f else 100 }}"></div>
+    <div class="col-md-3"><label class="form-label">Slot creation starts</label>
+        <input type="date" name="slot_creation_start" class="form-control" value="{{ f.slot_creation_start if f else '' }}"></div>
+    <div class="col-md-3"><label class="form-label">Slot creation ends</label>
+        <input type="date" name="slot_creation_end" class="form-control" value="{{ f.slot_creation_end if f else '' }}"></div>
+    <div class="col-md-3"><label class="form-label">Booking starts</label>
+        <input type="date" name="booking_start" class="form-control" value="{{ f.booking_start if f else '' }}"></div>
+    <div class="col-md-3"><label class="form-label">Booking ends</label>
+        <input type="date" name="booking_end" class="form-control" value="{{ f.booking_end if f else '' }}"></div>
+    <div class="col-12"><label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="2">{{ f.description if f and f.description else '' }}</textarea></div>
+    <div class="col-12">
+        <button class="btn btn-primary">Save</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('admin.exams') }}">Cancel</a>
+    </div>
+</form>
+{% endblock %}

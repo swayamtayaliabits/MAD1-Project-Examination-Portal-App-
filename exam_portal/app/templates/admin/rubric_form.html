@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+{% set f = form if form else rubric %}
+<h3>{{ 'Edit' if rubric else 'Add' }} criterion</h3>
+<p class="text-muted">{{ exam.name }}: criteria use {{ exam.rubric_total }} of {{ exam.max_marks }} marks.</p>
+<form method="post" class="col-md-6">
+    <div class="mb-3"><label class="form-label">Criterion name</label>
+        <input name="criterion_name" class="form-control" value="{{ f.criterion_name if f else '' }}" required></div>
+    <div class="mb-3"><label class="form-label">Maximum marks</label>
+        <input type="number" min="1" name="max_marks" class="form-control" value="{{ f.max_marks if f else '' }}" required></div>
+    <div class="mb-3"><label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="2">{{ f.description if f and f.description else '' }}</textarea></div>
+    <button class="btn btn-primary">Save</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('admin.exam_detail', exam_id=exam.id) }}">Cancel</a>
+</form>
+{% endblock %}

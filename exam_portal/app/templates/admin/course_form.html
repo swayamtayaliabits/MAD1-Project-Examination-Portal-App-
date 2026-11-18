@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+{% set f = form if form else course %}
+<h3>{{ 'Edit' if course else 'Add' }} course</h3>
+<form method="post" class="col-md-6">
+    <div class="mb-3"><label class="form-label">Course code</label>
+        <input name="code" class="form-control" value="{{ f.code if f else '' }}" required></div>
+    <div class="mb-3"><label class="form-label">Course name</label>
+        <input name="name" class="form-control" value="{{ f.name if f else '' }}" required></div>
+    <div class="mb-3"><label class="form-label">Status</label>
+        <select name="status" class="form-select">
+            {% for s in ['Active', 'Inactive'] %}
+            <option value="{{ s }}" {% if f and f.status == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+        </select></div>
+    <div class="mb-3"><label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="3">{{ f.description if f and f.description else '' }}</textarea></div>
+    <button class="btn btn-primary">Save</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('admin.courses') }}">Cancel</a>
+</form>
+{% endblock %}

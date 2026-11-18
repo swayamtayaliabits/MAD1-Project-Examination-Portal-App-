@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-3">Welcome, {{ current_user.name }}</h3>
+<div class="row g-3 mb-4">
+    <div class="col-md-3"><div class="card p-3"><div class="text-muted small">Assigned examinations</div><div class="stat-number">{{ exams|length }}</div></div></div>
+    <div class="col-md-3"><div class="card p-3"><div class="text-muted small">My slots</div><div class="stat-number">{{ slots|length }}</div></div></div>
+    <div class="col-md-3"><div class="card p-3"><div class="text-muted small">Students booked</div><div class="stat-number">{{ students_booked }}</div></div></div>
+    <div class="col-md-3"><div class="card p-3"><div class="text-muted small">Pending evaluations</div><div class="stat-number">{{ pending }}</div></div></div>
+</div>
+
+<h5>Assigned examinations</h5>
+<table class="table bg-white align-middle">
+    <thead><tr><th>Examination</th><th>Type</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for e in exams %}
+        <tr><td>{{ e.name }}</td><td>{{ e.exam_type }}</td><td>{{ e.status }}</td>
+            <td class="text-end"><a class="btn btn-sm btn-primary" href="{{ url_for('examiner.exam_detail', exam_id=e.id) }}">Open</a></td></tr>
+    {% else %}
+        <tr><td colspan="4" class="text-muted">The admin has not assigned any examination to you yet.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h5 class="mt-4">My slots</h5>
+<table class="table bg-white align-middle">
+    <thead><tr><th>Examination</th><th>Date</th><th>Time</th><th>Booked</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for s in slots %}
+        <tr><td>{{ s.exam.name }}</td><td>{{ s.slot_date }}</td>
+            <td>{{ s.start_time.strftime('%H:%M') }} - {{ s.end_time.strftime('%H:%M') }}</td>
+            <td>{{ s.active_bookings|length }} / {{ s.capacity }}</td><td>{{ s.status }}</td>
+            <td class="text-end"><a class="btn btn-sm btn-secondary" href="{{ url_for('examiner.slot_students', slot_id=s.id) }}">Students</a></td></tr>
+    {% else %}
+        <tr><td colspan="6" class="text-muted">You have not created any slots yet.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

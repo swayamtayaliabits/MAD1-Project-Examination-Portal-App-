@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h3>Register</h3>
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">I am a</label>
+                <select name="role" class="form-select">
+                    <option value="student" {% if form.get('role') == 'student' %}selected{% endif %}>Student</option>
+                    <option value="examiner" {% if form.get('role') == 'examiner' %}selected{% endif %}>Examiner (needs admin approval)</option>
+                </select>
+            </div>
+            <div class="mb-3"><label class="form-label">Full name</label>
+                <input name="name" class="form-control" value="{{ form.get('name', '') }}" required></div>
+            <div class="mb-3"><label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" value="{{ form.get('email', '') }}" required></div>
+            <div class="mb-3"><label class="form-label">Phone</label>
+                <input name="phone" class="form-control" value="{{ form.get('phone', '') }}"></div>
+            <div class="mb-3"><label class="form-label">Department (examiners only)</label>
+                <input name="department" class="form-control" value="{{ form.get('department', '') }}"></div>
+            <div class="mb-3"><label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" required minlength="6"></div>
+            <div class="mb-3"><label class="form-label">Confirm password</label>
+                <input type="password" name="confirm_password" class="form-control" required minlength="6"></div>
+            <button class="btn btn-primary">Register</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
